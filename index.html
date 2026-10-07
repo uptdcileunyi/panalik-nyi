@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard Panalik-NYI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    /* ============================================
+       CSS RESET & BASE
+       ============================================ */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Inter', sans-serif; background: #f0f2f5; min-height: 100vh; color: #333; }
+
+    /* LOGIN PAGE */
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #165254 0%, #1f6366 50%, #165254 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .login-page::before {
+      content: '';
+      position: absolute;
+      top: -50%; left: -50%;
+      width: 200%; height: 200%;
+      background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
+      animation: rotateBg 30s linear infinite;
+    }
+    @keyframes rotateBg { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .login-container { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; position: relative; z-index: 1; }
+    .login-card {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(20px);
+      border-radius: 24px;
+      padding: 50px 40px;
+      width: 100%; max-width: 440px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.6s ease-out;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .login-logo { text-align: center; margin-bottom: 30px; }
+    .login-logo .logo-icon {
+      width: 80px; height: 80px;
+      background: linear-gradient(135deg, #1f6366, #2a8a8e);
+      border-radius: 20px;
+      display: inline-flex; align-items: center; justify-content: center;
+      margin-bottom: 15px;
+      box-shadow: 0 10px 30px rgba(31, 99, 102, 0.3);
+    }
+    .login-logo .logo-icon img {
+      width: 58px;
+      height: 58px;
+      object-fit: contain;
+      display: block;
+    }
+    .login-logo h1 { font-size: 24px; font-weight: 800; color: #1f6366; letter-spacing: -0.5px; }
+    .login-logo p { font-size: 13px; color: #666; margin-top: 5px; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 13px; font-weight: 600; color: #444; margin-bottom: 8px; }
+    .form-group .input-wrapper { position: relative; }
+    .form-group .input-wrapper i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #999; font-size: 16px; }
+    .form-group input {
+      width: 100%; padding: 14px 15px 14px 45px;
+      border: 2px solid #e0e0e0; border-radius: 12px;
+      font-size: 15px; font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease; background: #f8f9fa;
+    }
+    .form-group input:focus { outline: none; border-color: #1f6366; background: white; box-shadow: 0 0 0 4px rgba(31, 99, 102, 0.1); }
+    .btn-login {
+      width: 100%; padding: 15px;
+      background: linear-gradient(135deg, #1f6366, #2a8a8e);
+      color: white; border: none; border-radius: 12px;
+      font-size: 16px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all 0.3s ease; margin-top: 10px; letter-spacing: 0.5px;
+    }
+    .btn-login:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(31, 99, 102, 0.4); }
+    .btn-login:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+    
+    .login-divider { display: flex; align-items: center; margin: 25px 0; gap: 15px; }
+    .login-divider::before, .login-divider::after { content: ''; flex: 1; height: 1px; background: #ddd; }
+    .login-divider span { font-size: 12px; color: #999; font-weight: 500; }
+
+    .btn-pengaduan {
+      width: 100%; padding: 14px;
+      background: linear-gradient(135deg, #e74c3c, #c0392b);
+      color: white; border: none; border-radius: 12px;
+      font-size: 15px; font-weight: 700; font-family: 'Inter', sans-serif;
+      cursor: pointer; transition: all 0.3s ease;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      text-decoration: none;
+    }
+    .btn-pengaduan:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(231, 76, 60, 0.4); }
+    
+    .social-links { display: flex; justify-content: center; gap: 12px; margin-top: 25px; }
+    .social-links a {
+      width: 45px; height: 45px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      text-decoration: none; color: white; font-size: 18px; transition: all 0.3s ease;
+    }
+    .social-links a.facebook { background: #1877F2; }
+    .social-links a.instagram { background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+    .social-links a.youtube { background: #FF0000; }
+    .social-links a.tiktok { background: #000000; }
+    .social-links a:hover { transform: translateY(-3px) scale(1.1); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+    .login-footer { text-align: center; padding: 20px; position: relative; z-index: 1; }
+    .login-footer p { color: rgba(255, 255, 255, 0.8); font-size: 13px; font-weight: 600; letter-spacing: 2px; }
+    
+    .error-message {
+      background: #fde8e8; color: #c0392b; padding: 12px 16px; border-radius: 10px;
+      font-size: 13px; font-weight: 500; margin-bottom: 15px;
+      display: none; align-items: center; gap: 8px; border: 1px solid #f5c6cb;
+      animation: shake 0.5s ease;
+    }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+    .error-message.show { display: flex; }
+
+    /* DASHBOARD PAGE */
+    .dashboard-page { display: none; min-height: 100vh; background: #f0f2f5; }
+    .navbar {
+      background: linear-gradient(135deg, #1f6366, #2a8a8e);
+      padding: 0 30px; height: 65px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .navbar-brand { display: flex; align-items: center; gap: 12px; color: white; }
+    .navbar-brand .brand-icon {
+      width: 40px; height: 40px;
+      background: rgba(255,255,255,0.2); border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .navbar-brand .brand-icon i { font-size: 20px; }
+    .navbar-brand h2 { font-size: 18px; font-weight: 700; }
+    .navbar-brand span { font-size: 12px; opacity: 0.8; font-weight: 400; }
+    .navbar-right { display: flex; align-items: center; gap: 12px; }
+    
+    /* Tombol Database di Navbar (Hanya muncul setelah login) */
+    .btn-database-nav {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.15);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+    }
+    .btn-database-nav:hover {
+      background: rgba(255,255,255,0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn-logout {
+      padding: 8px 20px;
+      background: rgba(231, 76, 60, 0.2);
+      color: #ffcccc;
+      border: 1px solid rgba(231, 76, 60, 0.4);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-logout:hover { 
+      background: rgba(231, 76, 60, 0.4);
+      color: white;
+    }
+
+    .dashboard-content { max-width: 1200px; margin: 0 auto; padding: 30px 20px; }
+    .dashboard-header { margin-bottom: 30px; }
+    .dashboard-header h1 { font-size: 28px; font-weight: 800; color: #1f6366; margin-bottom: 5px; }
+    .dashboard-header p { color: #666; font-size: 14px; }
+    .last-update {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: white; padding: 6px 14px; border-radius: 20px;
+      font-size: 12px; color: #666; margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .last-update i { color: #1f6366; }
+    .stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 30px; }
+    .stat-card {
+      background: white; border-radius: 16px; padding: 24px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+      transition: all 0.3s ease; border: 1px solid #eee;
+    }
+    .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.1); }
+    .stat-card .stat-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 15px; font-size: 22px;
+    }
+    .stat-card .stat-icon.blue { background: #e8f4f5; color: #1f6366; }
+    .stat-card .stat-icon.green { background: #e8f8f0; color: #27ae60; }
+    .stat-card .stat-icon.orange { background: #fef5e7; color: #f39c12; }
+    .stat-card .stat-icon.red { background: #fde8e8; color: #e74c3c; }
+    .stat-card .stat-icon.purple { background: #f0e6ff; color: #8e44ad; }
+    .stat-card .stat-value { font-size: 28px; font-weight: 800; color: #1f6366; line-height: 1; }
+    .stat-card .stat-label { font-size: 12px; color: #888; margin-top: 6px; font-weight: 500; }
+    .section-card {
+      background: white; border-radius: 16px; margin-bottom: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; border: 1px solid #eee;
+    }
+    .section-header { padding: 20px 25px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #f0f0f0; }
+    .section-header .section-icon {
+      width: 42px; height: 42px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; color: white;
+    }
+    .section-header .section-icon.survei { background: linear-gradient(135deg, #1f6366, #165254); }
+    .section-header .section-icon.pemeliharaan { background: linear-gradient(135deg, #27ae60, #1e8449); }
+    .section-header .section-icon.pengaduan { background: linear-gradient(135deg, #e74c3c, #c0392b); }
+    .section-header h3 { font-size: 17px; font-weight: 700; color: #1f6366; }
+    .section-body { padding: 25px; }
+    .data-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid #f5f5f5; }
+    .data-row:last-child { border-bottom: none; }
+    .data-row .data-label { font-size: 14px; color: #555; font-weight: 500; display: flex; align-items: center; gap: 10px; }
+    .data-row .data-label .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.baik { background: #27ae60; }
+    .dot.ringan { background: #f39c12; }
+    .dot.sedang { background: #e67e22; }
+    .dot.berat { background: #e74c3c; }
+    .dot.default { background: #1f6366; }
+    .dot.valid { background: #27ae60; }
+    .dot.tidak-valid { background: #e74c3c; }
+    .dot.selesai { background: #27ae60; }
+    .dot.proses { background: #f39c12; }
+    .dot.ditolak { background: #e74c3c; }
+    .dot.disetujui { background: #1f6366; }
+    .data-row .data-value {
+      font-size: 16px; font-weight: 700; color: #1f6366;
+      background: #e8f4f5; padding: 6px 16px; border-radius: 8px;
+      min-width: 60px; text-align: center;
+    }
+    .data-row .data-value.highlight { background: linear-gradient(135deg, #1f6366, #2a8a8e); color: white; }
+    .progress-container { margin-top: 20px; padding-top: 20px; border-top: 1px solid #f0f0f0; }
+    .progress-label { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 13px; color: #666; }
+    .progress-bar { height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; display: flex; }
+    .progress-bar .segment { height: 100%; transition: width 1s ease; }
+    .progress-bar .segment.baik { background: #27ae60; }
+    .progress-bar .segment.ringan { background: #f39c12; }
+    .progress-bar .segment.sedang { background: #e67e22; }
+    .progress-bar .segment.berat { background: #e74c3c; }
+    .progress-legend { display: flex; flex-wrap: wrap; gap: 15px; margin-top: 12px; }
+    .progress-legend .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: #666; }
+    .progress-legend .legend-dot { width: 10px; height: 10px; border-radius: 3px; }
+    .chart-row { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-bottom: 25px; }
+    .chart-card { background: white; border-radius: 16px; padding: 25px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border: 1px solid #eee; }
+    .chart-card h4 { font-size: 15px; font-weight: 700; color: #1f6366; margin-bottom: 20px; display: flex; align-items: center; gap: 8px; }
+    .donut-container { display: flex; align-items: center; justify-content: center; gap: 30px; }
+    .donut-chart { position: relative; width: 150px; height: 150px; }
+    .donut-chart svg { transform: rotate(-90deg); }
+    .donut-chart .donut-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); text-align: center; }
+    .donut-chart .donut-center .value { font-size: 28px; font-weight: 800; color: #1f6366; }
+    .donut-chart .donut-center .label { font-size: 11px; color: #888; }
+    .chart-legend { display: flex; flex-direction: column; gap: 10px; }
+    .chart-legend .legend-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #555; }
+    .chart-legend .legend-color { width: 12px; height: 12px; border-radius: 3px; }
+    .chart-legend .legend-value { margin-left: auto; font-weight: 700; color: #1f6366; }
+    .dashboard-footer {
+      background: linear-gradient(135deg, #1f6366, #2a8a8e);
+      color: white; text-align: center; padding: 25px 20px; margin-top: 20px;
+    }
+    .dashboard-footer p { font-size: 14px; font-weight: 700; letter-spacing: 3px; opacity: 0.9; }
+    .dashboard-footer .footer-sub { font-size: 11px; font-weight: 400; letter-spacing: 1px; opacity: 0.6; margin-top: 5px; }
+    .loading-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(31, 99, 102, 0.9);
+      display: none; align-items: center; justify-content: center;
+      z-index: 9999; flex-direction: column; gap: 20px;
+    }
+    .loading-overlay.show { display: flex; }
+    .spinner {
+      width: 50px; height: 50px;
+      border: 4px solid rgba(255,255,255,0.2);
+      border-top-color: white; border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading-overlay p { color: white; font-size: 14px; font-weight: 500; }
+    .fade-in { animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .slide-up { animation: slideUpAnim 0.5s ease forwards; opacity: 0; }
+    @keyframes slideUpAnim { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    .delay-1 { animation-delay: 0.1s; }
+    .delay-2 { animation-delay: 0.2s; }
+    .delay-3 { animation-delay: 0.3s; }
+    .delay-4 { animation-delay: 0.4s; }
+
+    @media (max-width: 768px) {
+      .login-card { padding: 35px 25px; }
+      .navbar { padding: 0 15px; }
+      .navbar-brand h2 { font-size: 15px; }
+      .dashboard-content { padding: 20px 15px; }
+      .dashboard-header h1 { font-size: 22px; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); gap: 12px; }
+      .stat-card { padding: 18px; }
+      .stat-card .stat-value { font-size: 22px; }
+      .chart-row { grid-template-columns: 1fr; }
+      .donut-container { flex-direction: column; }
+      .section-body { padding: 15px; }
+      .btn-database-nav span { display: none; } /* Sembunyikan teks "Database" di mobile, hanya icon */
+    }
+    @media (max-width: 480px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+  <!-- LOADING OVERLAY -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="spinner"></div>
+    <p>Memuat data dashboard...</p>
+  </div>
+
+  <!-- LOGIN PAGE -->
+  <div class="login-page" id="loginPage">
+    <div class="login-container">
+      <div class="login-card">
+        <div class="login-logo">
+          <div class="logo-icon">
+            <img src="logo.png" alt="Logo PANALIK-NYI">
+          </div>
+          <h1>PANALIK-NYI</h1>
+          <p>Pemetaan dan Analisis Inventarisasi Kondisi Jalan Cileunyi</p>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+          <i class="fas fa-exclamation-circle"></i>
+          <span id="errorText">Username atau password salah!</span>
+        </div>
+
+        <form id="loginForm" onsubmit="return handleLoginSubmit(event)">
+          <div class="form-group">
+            <label>Username</label>
+            <div class="input-wrapper">
+              <i class="fas fa-user"></i>
+              <input type="text" id="username" placeholder="Masukkan username" required autocomplete="off">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Password</label>
+            <div class="input-wrapper">
+              <i class="fas fa-lock"></i>
+              <input type="password" id="password" placeholder="Masukkan password" required>
+            </div>
+          </div>
+          <button type="submit" class="btn-login" id="btnLogin">
+            <i class="fas fa-sign-in-alt"></i> Masuk Dashboard
+          </button>
+        </form>
+
+        <div class="login-divider"><span>ATAU</span></div>
+
+        <!-- Tombol Pengaduan Tetap di Halaman Login (Publik) -->
+        <a href="#" class="btn-pengaduan" id="btnPengaduan" target="_blank">
+          <i class="fas fa-bullhorn"></i> Pengaduan Masyarakat
+        </a>
+
+        <div class="social-links">
+          <a href="#" class="facebook" id="linkFacebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="instagram" id="linkInstagram" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="youtube" id="linkYoutube" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
+          <a href="#" class="tiktok" id="linkTiktok" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
+        </div>
+      </div>
+    </div>
+    <div class="login-footer"><p>UPTD SARPRAS CILEUNYI</p></div>
+  </div>
+
+  <!-- DASHBOARD PAGE (Hanya muncul setelah login) -->
+  <div class="dashboard-page" id="dashboardPage">
+    <nav class="navbar">
+      <div class="navbar-brand">
+        <div class="brand-icon"><i class="fas fa-road"></i></div>
+        <div>
+          <h2>PANALIK-NYI</h2>
+          <span>Dashboard Rekap Data</span>
+        </div>
+      </div>
+      <div class="navbar-right">
+        <!-- TOMBOL DATABASE DITAMBAHKAN DI SINI (Hanya muncul setelah login) -->
+        <a href="https://docs.google.com/spreadsheets/d/10nqZ8Gk2ArXPvr-zCJJeXBjXMjefLiV4ItwCnVhIQGA/edit?gid=343660101#gid=343660101" class="btn-database-nav" target="_blank">
+          <i class="fas fa-database"></i> <span>Database</span>
+        </a>
+        
+        <button class="btn-logout" onclick="handleLogout()">
+          <i class="fas fa-sign-out-alt"></i> Keluar
+        </button>
+      </div>
+    </nav>
+
+    <div class="dashboard-content">
+      <div class="dashboard-header slide-up">
+        <h1><i class="fas fa-chart-line" style="color:#1f6366;"></i> Dashboard Rekap PANALIK-NYI</h1>
+        <p>Rekap otomatis dari sheet Data Survei Jalan, Pemeliharaan Jalan, dan Pengaduan Masyarakat.</p>
+        <div class="last-update">
+          <i class="fas fa-clock"></i>
+          <span id="lastUpdate">Memuat...</span>
+        </div>
+      </div>
+
+      <div class="stats-row">
+        <div class="stat-card slide-up delay-1">
+          <div class="stat-icon blue"><i class="fas fa-road"></i></div>
+          <div class="stat-value" id="statTotalRuas">-</div>
+          <div class="stat-label">Total Ruas Disurvei</div>
+        </div>
+        <div class="stat-card slide-up delay-2">
+          <div class="stat-icon green"><i class="fas fa-check-circle"></i></div>
+          <div class="stat-value" id="statKondisiBaik">-</div>
+          <div class="stat-label">Kondisi Baik</div>
+        </div>
+        <div class="stat-card slide-up delay-3">
+          <div class="stat-icon orange"><i class="fas fa-tools"></i></div>
+          <div class="stat-value" id="statTotalUsulan">-</div>
+          <div class="stat-label">Usulan Pemeliharaan</div>
+        </div>
+        <div class="stat-card slide-up delay-4">
+          <div class="stat-icon red"><i class="fas fa-bullhorn"></i></div>
+          <div class="stat-value" id="statTotalPengaduan">-</div>
+          <div class="stat-label">Total Pengaduan</div>
+        </div>
+        <div class="stat-card slide-up delay-4">
+          <div class="stat-icon purple"><i class="fas fa-money-bill-wave"></i></div>
+          <div class="stat-value" id="statTotalRAB" style="font-size:18px;">-</div>
+          <div class="stat-label">Total Estimasi RAB</div>
+        </div>
+      </div>
+
+      <div class="chart-row">
+        <div class="chart-card slide-up delay-2">
+          <h4><i class="fas fa-chart-pie" style="color:#1f6366;"></i> Kondisi Jalan</h4>
+          <div class="donut-container">
+            <div class="donut-chart">
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="60" fill="none" stroke="#f0f0f0" stroke-width="20"/>
+                <circle id="donutBaik" cx="75" cy="75" r="60" fill="none" stroke="#27ae60" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+                <circle id="donutRingan" cx="75" cy="75" r="60" fill="none" stroke="#f39c12" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+                <circle id="donutSedang" cx="75" cy="75" r="60" fill="none" stroke="#e67e22" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+                <circle id="donutBerat" cx="75" cy="75" r="60" fill="none" stroke="#e74c3c" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="value" id="donutTotal">0</div>
+                <div class="label">Total Ruas</div>
+              </div>
+            </div>
+            <div class="chart-legend" id="kondisiLegend"></div>
+          </div>
+        </div>
+
+        <div class="chart-card slide-up delay-3">
+          <h4><i class="fas fa-chart-pie" style="color:#e74c3c;"></i> Status Pengaduan</h4>
+          <div class="donut-container">
+            <div class="donut-chart">
+              <svg width="150" height="150" viewBox="0 0 150 150">
+                <circle cx="75" cy="75" r="60" fill="none" stroke="#f0f0f0" stroke-width="20"/>
+                <circle id="donutValid" cx="75" cy="75" r="60" fill="none" stroke="#27ae60" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+                <circle id="donutTidakValid" cx="75" cy="75" r="60" fill="none" stroke="#e74c3c" stroke-width="20" stroke-dasharray="0 377" stroke-linecap="round"/>
+              </svg>
+              <div class="donut-center">
+                <div class="value" id="donutPengaduanTotal">0</div>
+                <div class="label">Total</div>
+              </div>
+            </div>
+            <div class="chart-legend" id="pengaduanLegend"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card slide-up delay-1">
+        <div class="section-header">
+          <div class="section-icon survei"><i class="fas fa-road"></i></div>
+          <h3>1. Survei Inventarisasi Jalan</h3>
+        </div>
+        <div class="section-body">
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Total Ruas Jalan Disurvei</div>
+            <div class="data-value highlight" id="valTotalRuas">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot baik"></span> Kondisi Baik</div>
+            <div class="data-value" id="valKondisiBaik">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot ringan"></span> Kondisi Rusak Ringan</div>
+            <div class="data-value" id="valKondisiRingan">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot sedang"></span> Kondisi Rusak Sedang</div>
+            <div class="data-value" id="valKondisiSedang">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot berat"></span> Kondisi Rusak Berat</div>
+            <div class="data-value" id="valKondisiBerat">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Total Panjang Jalan Disurvei (m)</div>
+            <div class="data-value highlight" id="valTotalPanjang">-</div>
+          </div>
+          <div class="progress-container">
+            <div class="progress-label">
+              <span>Distribusi Kondisi Jalan</span>
+              <span id="progressPercent">0%</span>
+            </div>
+            <div class="progress-bar" id="kondisiProgressBar">
+              <div class="segment baik" id="progBaik" style="width:0%"></div>
+              <div class="segment ringan" id="progRingan" style="width:0%"></div>
+              <div class="segment sedang" id="progSedang" style="width:0%"></div>
+              <div class="segment berat" id="progBerat" style="width:0%"></div>
+            </div>
+            <div class="progress-legend">
+              <div class="legend-item"><div class="legend-dot" style="background:#27ae60;"></div> Baik</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#f39c12;"></div> Rusak Ringan</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#e67e22;"></div> Rusak Sedang</div>
+              <div class="legend-item"><div class="legend-dot" style="background:#e74c3c;"></div> Rusak Berat</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card slide-up delay-2">
+        <div class="section-header">
+          <div class="section-icon pemeliharaan"><i class="fas fa-tools"></i></div>
+          <h3>2. Pemeliharaan Jalan</h3>
+        </div>
+        <div class="section-body">
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Total Usulan Pemeliharaan</div>
+            <div class="data-value highlight" id="valTotalUsulanPem">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot disetujui"></span> Usulan Disetujui</div>
+            <div class="data-value" id="valUsulanDisetujui">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot ditolak"></span> Usulan Ditolak/Ditunda</div>
+            <div class="data-value" id="valUsulanDitolak">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot selesai"></span> Pelaksanaan Selesai</div>
+            <div class="data-value" id="valPelaksanaanSelesai">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot proses"></span> Pelaksanaan Proses</div>
+            <div class="data-value" id="valPelaksanaanProses">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Pelaksanaan Belum Mulai</div>
+            <div class="data-value" id="valPelaksanaanBelum">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Total Estimasi RAB (Rp)</div>
+            <div class="data-value highlight" id="valTotalRAB">-</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card slide-up delay-3">
+        <div class="section-header">
+          <div class="section-icon pengaduan"><i class="fas fa-bullhorn"></i></div>
+          <h3>3. Pengaduan Masyarakat</h3>
+        </div>
+        <div class="section-body">
+          <div class="data-row">
+            <div class="data-label"><span class="dot default"></span> Total Pengaduan Masuk</div>
+            <div class="data-value highlight" id="valTotalPengaduan">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot valid"></span> Pengaduan Valid</div>
+            <div class="data-value" id="valPengaduanValid">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot tidak-valid"></span> Pengaduan Tidak Valid</div>
+            <div class="data-value" id="valPengaduanTidakValid">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot selesai"></span> Penanganan Selesai</div>
+            <div class="data-value" id="valPenangananSelesai">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot proses"></span> Penanganan Proses</div>
+            <div class="data-value" id="valPenangananProses">-</div>
+          </div>
+          <div class="data-row">
+            <div class="data-label"><span class="dot ditolak"></span> Penanganan Ditolak</div>
+            <div class="data-value" id="valPenangananDitolak">-</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="dashboard-footer">
+      <p>UPTD SARPRAS CILEUNYI</p>
+      <div class="footer-sub">© 2026 Database Panalik-NYI. All rights reserved.</div>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT -->
+  <script>
+    const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFHRmwUYTyQkmYGBKwOa27C4af-LL7g__yLUqETue5UoDEyEVLK1qd-e1yANJ_bKMcyg/exec';
+
+    async function handleLoginSubmit(e) {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const btnLogin = document.getElementById('btnLogin');
+      const errorMsg = document.getElementById('errorMessage');
+
+      errorMsg.classList.remove('show');
+      btnLogin.disabled = true;
+      btnLogin.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memverifikasi...';
+
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=login&username=${encodeURIComponent(username)}&password=${encodeURIComponent(password)}`);
+        const result = await response.json();
+
+        btnLogin.disabled = false;
+        btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk Dashboard';
+
+        if (result.success) {
+          document.getElementById('loginPage').style.display = 'none';
+          document.getElementById('dashboardPage').style.display = 'block';
+          loadDashboardData();
+        } else {
+          errorMsg.classList.add('show');
+          document.getElementById('errorText').textContent = result.message;
+          document.getElementById('password').value = '';
+          document.getElementById('password').focus();
+        }
+      } catch (error) {
+        btnLogin.disabled = false;
+        btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk Dashboard';
+        errorMsg.classList.add('show');
+        document.getElementById('errorText').textContent = 'Error koneksi: ' + error.message;
+      }
+      return false;
+    }
+
+    function handleLogout() {
+      document.getElementById('dashboardPage').style.display = 'none';
+      document.getElementById('loginPage').style.display = 'flex';
+      document.getElementById('username').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('errorMessage').classList.remove('show');
+    }
+
+    async function loadDashboardData() {
+      const loading = document.getElementById('loadingOverlay');
+      loading.classList.add('show');
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=dashboard`);
+        const data = await response.json();
+        loading.classList.remove('show');
+        if (data.error) {
+          showDashboardError(data.error);
+          return;
+        }
+        renderDashboard(data);
+      } catch (error) {
+        loading.classList.remove('show');
+        showDashboardError('Gagal memuat data: ' + error.message);
+      }
+    }
+
+    function showDashboardError(message) {
+      const content = document.querySelector('.dashboard-content');
+      const errorDiv = document.createElement('div');
+      errorDiv.style.cssText = 'background:#fde8e8;border:2px solid #e74c3c;border-radius:16px;padding:30px;text-align:center;margin:20px 0;';
+      errorDiv.innerHTML = `
+        <i class="fas fa-exclamation-triangle" style="font-size:48px;color:#e74c3c;margin-bottom:15px;"></i>
+        <h3 style="color:#c0392b;margin-bottom:10px;">Gagal Memuat Data</h3>
+        <p style="color:#666;font-size:14px;margin-bottom:20px;word-break:break-all;">${message}</p>
+        <button onclick="loadDashboardData()" style="padding:12px 30px;background:#e74c3c;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+          <i class="fas fa-redo"></i> Coba Lagi
+        </button>
+      `;
+      content.insertBefore(errorDiv, content.firstChild);
+    }
+
+    function renderDashboard(data) {
+      const s = data.survei || {};
+      const p = data.pemeliharaan || {};
+      const pg = data.pengaduan || {};
+
+      const now = new Date();
+      document.getElementById('lastUpdate').textContent =
+        'Terakhir diperbarui: ' + now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+      document.getElementById('statTotalRuas').textContent = s.totalRuas || 0;
+      document.getElementById('statKondisiBaik').textContent = s.kondisiBaik || 0;
+      document.getElementById('statTotalUsulan').textContent = p.totalUsulan || 0;
+      document.getElementById('statTotalPengaduan').textContent = pg.totalMasuk || 0;
+      document.getElementById('statTotalRAB').textContent = formatRupiah(p.totalRAB);
+
+      document.getElementById('valTotalRuas').textContent = s.totalRuas || 0;
+      document.getElementById('valKondisiBaik').textContent = s.kondisiBaik || 0;
+      document.getElementById('valKondisiRingan').textContent = s.kondisiRusakRingan || 0;
+      document.getElementById('valKondisiSedang').textContent = s.kondisiRusakSedang || 0;
+      document.getElementById('valKondisiBerat').textContent = s.kondisiRusakBerat || 0;
+      document.getElementById('valTotalPanjang').textContent = formatNumber(s.totalPanjang) + ' m';
+
+      const totalKondisi = (s.kondisiBaik || 0) + (s.kondisiRusakRingan || 0) + (s.kondisiRusakSedang || 0) + (s.kondisiRusakBerat || 0);
+      if (totalKondisi > 0) {
+        document.getElementById('progBaik').style.width = ((s.kondisiBaik || 0) / totalKondisi * 100).toFixed(1) + '%';
+        document.getElementById('progRingan').style.width = ((s.kondisiRusakRingan || 0) / totalKondisi * 100).toFixed(1) + '%';
+        document.getElementById('progSedang').style.width = ((s.kondisiRusakSedang || 0) / totalKondisi * 100).toFixed(1) + '%';
+        document.getElementById('progBerat').style.width = ((s.kondisiRusakBerat || 0) / totalKondisi * 100).toFixed(1) + '%';
+        document.getElementById('progressPercent').textContent = '100%';
+      }
+      renderDonutKondisi(s, totalKondisi);
+
+      document.getElementById('valTotalUsulanPem').textContent = p.totalUsulan || 0;
+      document.getElementById('valUsulanDisetujui').textContent = p.usulanDisetujui || 0;
+      document.getElementById('valUsulanDitolak').textContent = p.usulanDitolak || 0;
+      document.getElementById('valPelaksanaanSelesai').textContent = p.pelaksanaanSelesai || 0;
+      document.getElementById('valPelaksanaanProses').textContent = p.pelaksanaanProses || 0;
+      document.getElementById('valPelaksanaanBelum').textContent = p.pelaksanaanBelumMulai || 0;
+      document.getElementById('valTotalRAB').textContent = formatRupiah(p.totalRAB);
+
+      document.getElementById('valTotalPengaduan').textContent = pg.totalMasuk || 0;
+      document.getElementById('valPengaduanValid').textContent = pg.valid || 0;
+      document.getElementById('valPengaduanTidakValid').textContent = pg.tidakValid || 0;
+      document.getElementById('valPenangananSelesai').textContent = pg.penangananSelesai || 0;
+      document.getElementById('valPenangananProses').textContent = pg.penangananProses || 0;
+      document.getElementById('valPenangananDitolak').textContent = pg.penangananDitolak || 0;
+
+      renderDonutPengaduan(pg);
+    }
+
+    function renderDonutKondisi(s, total) {
+      const circumference = 2 * Math.PI * 60;
+      document.getElementById('donutTotal').textContent = total || 0;
+      const segments = [
+        { id: 'donutBaik', value: s.kondisiBaik || 0, color: '#27ae60', label: 'Baik' },
+        { id: 'donutRingan', value: s.kondisiRusakRingan || 0, color: '#f39c12', label: 'Rusak Ringan' },
+        { id: 'donutSedang', value: s.kondisiRusakSedang || 0, color: '#e67e22', label: 'Rusak Sedang' },
+        { id: 'donutBerat', value: s.kondisiRusakBerat || 0, color: '#e74c3c', label: 'Rusak Berat' }
+      ];
+      let offset = 0;
+      segments.forEach(seg => {
+        const el = document.getElementById(seg.id);
+        const dashLength = total > 0 ? (seg.value / total) * circumference : 0;
+        el.setAttribute('stroke-dasharray', `${dashLength} ${circumference}`);
+        el.setAttribute('stroke-dashoffset', `${-offset}`);
+        offset += dashLength;
+      });
+      document.getElementById('kondisiLegend').innerHTML = segments.map(seg => `
+        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${seg.value}</span></div>
+      `).join('');
+    }
+
+    function renderDonutPengaduan(pg) {
+      const circumference = 2 * Math.PI * 60;
+      const total = pg.totalMasuk || 0;
+      document.getElementById('donutPengaduanTotal').textContent = total;
+      const segments = [
+        { id: 'donutValid', value: pg.valid || 0, color: '#27ae60', label: 'Valid' },
+        { id: 'donutTidakValid', value: pg.tidakValid || 0, color: '#e74c3c', label: 'Tidak Valid' }
+      ];
+      let offset = 0;
+      segments.forEach(seg => {
+        const el = document.getElementById(seg.id);
+        const dashLength = total > 0 ? (seg.value / total) * circumference : 0;
+        el.setAttribute('stroke-dasharray', `${dashLength} ${circumference}`);
+        el.setAttribute('stroke-dashoffset', `${-offset}`);
+        offset += dashLength;
+      });
+      document.getElementById('pengaduanLegend').innerHTML = segments.map(seg => `
+        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${seg.value}</span></div>
+      `).join('');
+    }
+
+    function formatRupiah(value) {
+      if (!value) return 'Rp 0';
+      const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9]/g, '')) : value;
+      if (isNaN(num)) return 'Rp 0';
+      return 'Rp ' + num.toLocaleString('id-ID');
+    }
+
+    function formatNumber(value) {
+      if (!value) return '0';
+      return Number(value).toLocaleString('id-ID');
+    }
+
+    async function loadLoginConfig() {
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
+        const config = await response.json();
+        if (config.formPengaduan) document.getElementById('btnPengaduan').href = config.formPengaduan;
+        if (config.socialMedia) {
+          document.getElementById('linkFacebook').href = config.socialMedia.facebook || '#';
+          document.getElementById('linkInstagram').href = config.socialMedia.instagram || '#';
+          document.getElementById('linkYoutube').href = config.socialMedia.youtube || '#';
+          document.getElementById('linkTiktok').href = config.socialMedia.tiktok || '#';
+        }
+      } catch (error) {
+        console.error('Gagal load config:', error);
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      loadLoginConfig();
+    });
+  </script>
+</body>
+</html>
