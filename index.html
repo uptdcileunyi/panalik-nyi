@@ -533,11 +533,7 @@
           <div class="stat-value" id="statTotalPengaduan">-</div>
           <div class="stat-label">Total Pengaduan</div>
         </div>
-        <div class="stat-card slide-up delay-4">
-          <div class="stat-icon purple"><i class="fas fa-money-bill-wave"></i></div>
-          <div class="stat-value" id="statTotalRAB" style="font-size:18px;">-</div>
-          <div class="stat-label">Total Estimasi RAB</div>
-        </div>
+       
       </div>
 
       <div class="chart-row">
@@ -975,8 +971,7 @@
       document.getElementById('statKondisiBaik').textContent = s.kondisiBaik || 0;
       document.getElementById('statTotalUsulan').textContent = p.totalUsulan || 0;
       document.getElementById('statTotalPengaduan').textContent = pg.totalMasuk || 0;
-      document.getElementById('statTotalRAB').textContent = formatRupiah(p.totalRAB);
-
+    
       document.getElementById('valTotalRuas').textContent = s.totalRuas || 0;
       document.getElementById('valKondisiBaik').textContent = s.kondisiBaik || 0;
       document.getElementById('valKondisiRingan').textContent = s.kondisiRusakRingan || 0;
