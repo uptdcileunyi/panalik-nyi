@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Panalik-Nyi</title>
+  <title>Dashboard Panalik-NYI</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
@@ -138,7 +138,6 @@
     .navbar-brand span { font-size: 12px; opacity: 0.8; font-weight: 400; }
     .navbar-right { display: flex; align-items: center; gap: 12px; }
     
-    /* Tombol Database di Navbar (Hanya muncul setelah login) */
     .btn-database-nav {
       padding: 8px 16px;
       background: rgba(255,255,255,0.15);
@@ -159,6 +158,25 @@
       background: rgba(255,255,255,0.25);
       transform: translateY(-1px);
     }
+
+    .btn-refresh {
+      padding: 8px 16px;
+      background: rgba(39, 174, 96, 0.15);
+      color: #27ae60;
+      border: 1px solid rgba(39, 174, 96, 0.3);
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      font-family: 'Inter', sans-serif;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-refresh:hover { background: rgba(39, 174, 96, 0.25); transform: translateY(-1px); }
+    .btn-refresh i { transition: transform 0.5s ease; }
+    .btn-refresh:hover i { transform: rotate(180deg); }
 
     .btn-logout {
       padding: 8px 20px;
@@ -300,6 +318,74 @@
     .delay-3 { animation-delay: 0.3s; }
     .delay-4 { animation-delay: 0.4s; }
 
+    /* ============================================
+       MODAL TENTANG APLIKASI
+       ============================================ */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 10000;
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-overlay.show { display: flex; animation: fadeIn 0.3s ease; }
+    .modal-content {
+      background: white; border-radius: 16px; width: 100%; max-width: 500px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+      animation: slideUp 0.3s ease; overflow: hidden;
+    }
+    .modal-header {
+      background: linear-gradient(135deg, #1f6366, #2a8a8e);
+      color: white; padding: 20px 25px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .modal-header h3 { font-size: 18px; font-weight: 700; margin: 0; display: flex; align-items: center; gap: 10px; }
+    .modal-close {
+      background: rgba(255,255,255,0.2); border: none; color: white;
+      width: 32px; height: 32px; border-radius: 50%; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; transition: 0.2s;
+    }
+    .modal-close:hover { background: rgba(255,255,255,0.4); }
+    .modal-body { padding: 25px; }
+    
+    .about-info { display: flex; flex-direction: column; gap: 24px; }
+    .about-section-title {
+      font-size: 12px; font-weight: 700; color: #1f6366;
+      text-transform: uppercase; letter-spacing: 1px;
+      border-bottom: 2px solid #e8f4f5; padding-bottom: 6px; margin-bottom: 12px;
+    }
+    .about-person strong { display: block; font-size: 16px; color: #333; margin-bottom: 4px; }
+    .about-person span { display: block; font-size: 13px; color: #666; line-height: 1.6; }
+    .about-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f0f0f0; }
+    .about-row:last-child { border-bottom: none; }
+    .about-row span { font-size: 14px; color: #666; }
+    .about-row strong { font-size: 14px; color: #1f6366; font-weight: 700; }
+
+    /* ============================================
+       INDIKATOR AUTO REFRESH (BARU)
+       ============================================ */
+    .refresh-indicator {
+      position: fixed;
+      top: 75px;
+      right: 20px;
+      background: white;
+      padding: 8px 14px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #1f6366;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      display: none;
+      align-items: center;
+      gap: 6px;
+      z-index: 99;
+      border: 1px solid #e8f4f5;
+    }
+    .refresh-indicator.show { display: flex; animation: fadeIn 0.3s ease; }
+    .refresh-indicator i { color: #27ae60; animation: spin 1s linear infinite; }
+    .refresh-indicator.success i { color: #27ae60; animation: none; }
+
     @media (max-width: 768px) {
       .login-card { padding: 35px 25px; }
       .navbar { padding: 0 15px; }
@@ -312,7 +398,8 @@
       .chart-row { grid-template-columns: 1fr; }
       .donut-container { flex-direction: column; }
       .section-body { padding: 15px; }
-      .btn-database-nav span { display: none; } /* Sembunyikan teks "Database" di mobile, hanya icon */
+      .btn-database-nav span, .btn-refresh span { display: none; }
+      .btn-refresh { padding: 8px 12px; }
     }
     @media (max-width: 480px) { .stats-row { grid-template-columns: 1fr 1fr; } }
   </style>
@@ -323,6 +410,12 @@
   <div class="loading-overlay" id="loadingOverlay">
     <div class="spinner"></div>
     <p>Memuat data dashboard...</p>
+  </div>
+
+  <!-- INDIKATOR AUTO REFRESH (BARU) -->
+  <div class="refresh-indicator" id="refreshIndicator">
+    <i class="fas fa-sync-alt"></i>
+    <span id="refreshText">Memperbarui data...</span>
   </div>
 
   <!-- LOGIN PAGE -->
@@ -364,14 +457,13 @@
 
         <div class="login-divider"><span>ATAU</span></div>
 
-        <!-- Tombol Pengaduan Tetap di Halaman Login (Publik) -->
         <a href="#" class="btn-pengaduan" id="btnPengaduan" target="_blank">
           <i class="fas fa-bullhorn"></i> Pengaduan Masyarakat
         </a>
 
         <div class="social-links">
           <a href="#" class="facebook" id="linkFacebook" target="_blank" title="Facebook"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="instagram" id="linkInstagram" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.instagram.com/uptd.sapras.cileunyi/" class="instagram" id="linkInstagram" target="_blank" title="Instagram"><i class="fab fa-instagram"></i></a>
           <a href="#" class="youtube" id="linkYoutube" target="_blank" title="YouTube"><i class="fab fa-youtube"></i></a>
           <a href="#" class="tiktok" id="linkTiktok" target="_blank" title="TikTok"><i class="fab fa-tiktok"></i></a>
         </div>
@@ -380,7 +472,7 @@
     <div class="login-footer"><p>UPTD SARPRAS CILEUNYI</p></div>
   </div>
 
-  <!-- DASHBOARD PAGE (Hanya muncul setelah login) -->
+  <!-- DASHBOARD PAGE -->
   <div class="dashboard-page" id="dashboardPage">
     <nav class="navbar">
       <div class="navbar-brand">
@@ -391,14 +483,19 @@
         </div>
       </div>
       <div class="navbar-right">
-        <!-- TOMBOL DATABASE DITAMBAHKAN DI SINI (Hanya muncul setelah login) -->
         <a href="https://docs.google.com/spreadsheets/d/10nqZ8Gk2ArXPvr-zCJJeXBjXMjefLiV4ItwCnVhIQGA/edit?gid=343660101#gid=343660101" class="btn-database-nav" target="_blank">
           <i class="fas fa-database"></i> <span>Database</span>
         </a>
         <a href="https://uptdcileunyi.github.io/survey-jalan/" class="btn-database-nav" target="_blank">
-        <i class="fas fa-clipboard-check"></i> <span>Data Survei</span>
+          <i class="fas fa-clipboard-check"></i> <span>Data Survei</span>
         </a>
-        
+        <button type="button" class="btn-database-nav" onclick="showAbout()">
+          <i class="fas fa-info-circle"></i> <span>Tentang</span>
+        </button>
+        <!-- TOMBOL REFRESH MANUAL (BARU) -->
+        <button class="btn-refresh" onclick="manualRefresh()" title="Refresh data">
+          <i class="fas fa-sync-alt"></i> <span>Refresh</span>
+        </button>
         <button class="btn-logout" onclick="handleLogout()">
           <i class="fas fa-sign-out-alt"></i> Keluar
         </button>
@@ -607,14 +704,156 @@
 
     <div class="dashboard-footer">
       <p>UPTD SARPRAS CILEUNYI</p>
-      <div class="footer-sub">© 2026 Database Panalik-NYI. All rights reserved.</div>
+      <div class="footer-sub">© 2026 UPTD Pengelolaan Sarana Prasarana Wilayah Cileunyi<br>Dinas Pekerjaan Umum dan Tata Ruang Kabupaten Bandung. All rights reserved.</div>
+    </div>
+  </div>
+
+  <!-- MODAL TENTANG APLIKASI -->
+  <div class="modal-overlay" id="aboutModal" onclick="if(event.target === this) closeAbout()">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3><i class="fas fa-info-circle"></i> Tentang Aplikasi</h3>
+        <button class="modal-close" onclick="closeAbout()"><i class="fas fa-times"></i></button>
+      </div>
+      <div class="modal-body">
+        <div class="about-info">
+          <div>
+            <div class="about-section-title">Penggagas Ide</div>
+            <div class="about-person">
+              <strong id="aboutInitiator">Ir. Dewi Phrameswari, S.T., M.T.</strong>
+              <span id="aboutInitiatorPos">Kepala Sub Bagian Tata Usaha</span>
+              <span id="aboutInitiatorUnit">UPTD Pengelolaan Sarana Prasarana Wilayah Cileunyi</span>
+              <span id="aboutInitiatorInst">Dinas Pekerjaan Umum dan Tata Ruang Kabupaten Bandung</span>
+            </div>
+          </div>
+          <div>
+            <div class="about-section-title">Pengembang</div>
+            <div class="about-person">
+              <strong id="aboutDeveloper">Roni Romansa</strong>
+            </div>
+          </div>
+          <div>
+            <div class="about-section-title">Informasi Aplikasi</div>
+            <div class="about-row">
+              <span>Versi Aplikasi</span>
+              <strong id="aboutVersion">1.0.0</strong>
+            </div>
+            <div class="about-row">
+              <span>Tahun Pengembangan</span>
+              <strong id="aboutYear">2026</strong>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
   <!-- JAVASCRIPT -->
   <script>
+    const APP_INFO = {
+      name: 'PANALIK-NYI',
+      subtitle: 'Dashboard Rekap Data',
+      initiator: 'Ir. Dewi Phrameswari, S.T., M.T.',
+      initiatorPosition: 'Kepala Sub Bagian Tata Usaha',
+      initiatorUnit: 'UPTD Pengelolaan Sarana Prasarana Wilayah Cileunyi',
+      initiatorInstitution: 'Dinas Pekerjaan Umum dan Tata Ruang Kabupaten Bandung',
+      developer: 'Roni Romansa',
+      version: '1.0.0',
+      year: '2026'
+    };
+
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFHRmwUYTyQkmYGBKwOa27C4af-LL7g__yLUqETue5UoDEyEVLK1qd-e1yANJ_bKMcyg/exec';
 
+    // ============================================
+    // KONFIGURASI AUTO REFRESH & SESSION
+    // ============================================
+    const AUTO_REFRESH_INTERVAL = 60000; // 60 detik (ubah sesuai kebutuhan)
+    let refreshTimer = null;
+    let isSessionActive = false;
+
+    // --- SESSION MANAGEMENT ---
+    function saveSession() {
+      sessionStorage.setItem('panalik_session', 'active');
+      sessionStorage.setItem('panalik_login_time', new Date().getTime());
+      isSessionActive = true;
+    }
+
+    function checkSession() {
+      const session = sessionStorage.getItem('panalik_session');
+      const loginTime = sessionStorage.getItem('panalik_login_time');
+      if (session === 'active' && loginTime) {
+        const elapsed = new Date().getTime() - parseInt(loginTime);
+        if (elapsed < 28800000) { // 8 jam
+          isSessionActive = true;
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function clearSession() {
+      sessionStorage.removeItem('panalik_session');
+      sessionStorage.removeItem('panalik_login_time');
+      isSessionActive = false;
+      stopAutoRefresh();
+    }
+
+    // --- AUTO REFRESH MANAGEMENT ---
+    function startAutoRefresh() {
+      stopAutoRefresh();
+      refreshTimer = setInterval(() => {
+        if (isSessionActive && document.getElementById('dashboardPage').style.display !== 'none') {
+          loadDashboardData(true); // true = silent refresh
+        }
+      }, AUTO_REFRESH_INTERVAL);
+    }
+
+    function stopAutoRefresh() {
+      if (refreshTimer) {
+        clearInterval(refreshTimer);
+        refreshTimer = null;
+      }
+    }
+
+    function showRefreshIndicator(text, isSuccess = false) {
+      const indicator = document.getElementById('refreshIndicator');
+      const refreshText = document.getElementById('refreshText');
+      refreshText.textContent = text;
+      indicator.classList.add('show');
+      if (isSuccess) indicator.classList.add('success');
+      else indicator.classList.remove('success');
+      
+      setTimeout(() => {
+        indicator.classList.remove('show');
+      }, 2500);
+    }
+
+    function manualRefresh() {
+      if (!isSessionActive) {
+        alert('Sesi login sudah berakhir. Silakan login ulang.');
+        handleLogout();
+        return;
+      }
+      loadDashboardData(false); // false = tampilkan loading overlay penuh
+    }
+
+    // --- FUNGSI MODAL ---
+    function showAbout() {
+      document.getElementById('aboutInitiator').textContent = APP_INFO.initiator;
+      document.getElementById('aboutInitiatorPos').textContent = APP_INFO.initiatorPosition;
+      document.getElementById('aboutInitiatorUnit').textContent = APP_INFO.initiatorUnit;
+      document.getElementById('aboutInitiatorInst').textContent = APP_INFO.initiatorInstitution;
+      document.getElementById('aboutDeveloper').textContent = APP_INFO.developer;
+      document.getElementById('aboutVersion').textContent = APP_INFO.version;
+      document.getElementById('aboutYear').textContent = APP_INFO.year;
+      document.getElementById('aboutModal').classList.add('show');
+    }
+
+    function closeAbout() {
+      document.getElementById('aboutModal').classList.remove('show');
+    }
+
+    // --- LOGIN & LOGOUT ---
     async function handleLoginSubmit(e) {
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
@@ -634,9 +873,11 @@
         btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk Dashboard';
 
         if (result.success) {
+          saveSession(); // Simpan session
           document.getElementById('loginPage').style.display = 'none';
           document.getElementById('dashboardPage').style.display = 'block';
-          loadDashboardData();
+          loadDashboardData(false);
+          startAutoRefresh(); // Mulai auto refresh
         } else {
           errorMsg.classList.add('show');
           document.getElementById('errorText').textContent = result.message;
@@ -653,6 +894,7 @@
     }
 
     function handleLogout() {
+      clearSession(); // Hapus session
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('loginPage').style.display = 'flex';
       document.getElementById('username').value = '';
@@ -660,33 +902,64 @@
       document.getElementById('errorMessage').classList.remove('show');
     }
 
-    async function loadDashboardData() {
+    // --- LOAD DATA DASHBOARD ---
+    async function loadDashboardData(silent = false) {
       const loading = document.getElementById('loadingOverlay');
-      loading.classList.add('show');
+      
+      if (silent) {
+        showRefreshIndicator('Memperbarui data...', false);
+      } else {
+        loading.classList.add('show');
+      }
+      
       try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=dashboard`);
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=dashboard`, {
+          cache: 'no-store' // PENTING: Hindari cache browser agar data selalu fresh
+        });
         const data = await response.json();
+        
         loading.classList.remove('show');
+        
         if (data.error) {
-          showDashboardError(data.error);
+          if (!silent) showDashboardError(data.error);
+          if (silent) showRefreshIndicator('Gagal memperbarui data', true);
           return;
         }
         renderDashboard(data);
+        
+        // Update timestamp
+        const now = new Date();
+        document.getElementById('lastUpdate').textContent =
+          'Terakhir diperbarui: ' + now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + 
+          ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        
+        if (silent) {
+          showRefreshIndicator('✓ Data berhasil diperbarui', true);
+        }
       } catch (error) {
         loading.classList.remove('show');
-        showDashboardError('Gagal memuat data: ' + error.message);
+        if (!silent) {
+          showDashboardError('Gagal memuat data: ' + error.message);
+        } else {
+          showRefreshIndicator('Gagal memperbarui data', true);
+        }
       }
     }
 
     function showDashboardError(message) {
       const content = document.querySelector('.dashboard-content');
+      // Hapus error lama jika ada
+      const oldError = content.querySelector('.dashboard-error-msg');
+      if (oldError) oldError.remove();
+
       const errorDiv = document.createElement('div');
+      errorDiv.className = 'dashboard-error-msg';
       errorDiv.style.cssText = 'background:#fde8e8;border:2px solid #e74c3c;border-radius:16px;padding:30px;text-align:center;margin:20px 0;';
       errorDiv.innerHTML = `
         <i class="fas fa-exclamation-triangle" style="font-size:48px;color:#e74c3c;margin-bottom:15px;"></i>
         <h3 style="color:#c0392b;margin-bottom:10px;">Gagal Memuat Data</h3>
         <p style="color:#666;font-size:14px;margin-bottom:20px;word-break:break-all;">${message}</p>
-        <button onclick="loadDashboardData()" style="padding:12px 30px;background:#e74c3c;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
+        <button onclick="loadDashboardData(false)" style="padding:12px 30px;background:#e74c3c;color:white;border:none;border-radius:8px;cursor:pointer;font-weight:600;">
           <i class="fas fa-redo"></i> Coba Lagi
         </button>
       `;
@@ -697,10 +970,6 @@
       const s = data.survei || {};
       const p = data.pemeliharaan || {};
       const pg = data.pengaduan || {};
-
-      const now = new Date();
-      document.getElementById('lastUpdate').textContent =
-        'Terakhir diperbarui: ' + now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + ' ' + now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
 
       document.getElementById('statTotalRuas').textContent = s.totalRuas || 0;
       document.getElementById('statKondisiBaik').textContent = s.kondisiBaik || 0;
@@ -814,8 +1083,32 @@
       }
     }
 
+    // --- INITIALIZATION & VISIBILITY CHANGE ---
     window.addEventListener('DOMContentLoaded', function() {
       loadLoginConfig();
+      
+      // Cek session saat halaman dimuat
+      if (checkSession()) {
+        document.getElementById('loginPage').style.display = 'none';
+        document.getElementById('dashboardPage').style.display = 'block';
+        loadDashboardData(false);
+        startAutoRefresh();
+      } else {
+        document.getElementById('loginPage').style.display = 'flex';
+        document.getElementById('dashboardPage').style.display = 'none';
+      }
+    });
+
+    // Hemat resource: Pause auto-refresh saat tab tidak aktif
+    document.addEventListener('visibilitychange', function() {
+      if (document.hidden) {
+        stopAutoRefresh();
+      } else {
+        if (isSessionActive) {
+          loadDashboardData(true);
+          startAutoRefresh();
+        }
+      }
     });
   </script>
 </body>
