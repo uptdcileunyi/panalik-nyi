@@ -508,7 +508,6 @@
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
     }
-
   </style>
 </head>
 <body>
@@ -519,7 +518,7 @@
     <p>Memuat data dashboard...</p>
   </div>
 
-  <!-- INDIKATOR AUTO REFRESH (BARU) -->
+  <!-- INDIKATOR AUTO REFRESH -->
   <div class="refresh-indicator" id="refreshIndicator">
     <i class="fas fa-sync-alt"></i>
     <span id="refreshText">Memperbarui data...</span>
@@ -568,34 +567,34 @@
           <i class="fas fa-bullhorn"></i> Pengaduan Masyarakat
         </a>
 
-<div class="social-links">
-  <a href="https://www.facebook.com/Uptd-Sapras-Cileunyi-100077656006428/" 
-     class="facebook" 
-     id="linkFacebook" 
-     target="_blank" 
-     rel="noopener noreferrer" 
-     title="Facebook UPTD Sarpras Cileunyi">
-    <i class="fab fa-facebook-f"></i>
-  </a>
+        <div class="social-links">
+          <a href="https://www.facebook.com/Uptd-Sapras-Cileunyi" 
+             class="facebook" 
+             id="linkFacebook" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             title="Facebook UPTD Sapras Cileunyi">
+            <i class="fab fa-facebook-f"></i>
+          </a>
 
-  <a href="https://www.instagram.com/uptd.sapras.cileunyi/" 
-     class="instagram" 
-     id="linkInstagram" 
-     target="_blank" 
-     rel="noopener noreferrer" 
-     title="Instagram UPTD Sarpras Cileunyi">
-    <i class="fab fa-instagram"></i>
-  </a>
+          <a href="https://www.instagram.com/uptd.sapras.cileunyi/" 
+             class="instagram" 
+             id="linkInstagram" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             title="Instagram UPTD Sapras Cileunyi">
+            <i class="fab fa-instagram"></i>
+          </a>
 
-  <a href="https://www.tiktok.com/@uptd.sapras.cileunyi" 
-     class="tiktok" 
-     id="linkTiktok" 
-     target="_blank" 
-     rel="noopener noreferrer" 
-     title="TikTok UPTD Sarpras Cileunyi">
-    <i class="fab fa-tiktok"></i>
-  </a>
-</div>
+          <a href="https://www.tiktok.com/@uptd.sapras.cileunyi" 
+             class="tiktok" 
+             id="linkTiktok" 
+             target="_blank" 
+             rel="noopener noreferrer" 
+             title="TikTok UPTD Sapras Cileunyi">
+            <i class="fab fa-tiktok"></i>
+          </a>
+        </div>
       </div>
     </div>
     <div class="login-footer"><p>UPTD SARPRAS CILEUNYI</p></div>
@@ -621,7 +620,6 @@
         <button type="button" class="btn-database-nav" onclick="showAbout()">
           <i class="fas fa-info-circle"></i> <span>Tentang</span>
         </button>
-        <!-- TOMBOL REFRESH MANUAL (BARU) -->
         <button class="btn-refresh" onclick="manualRefresh()" title="Refresh data">
           <i class="fas fa-sync-alt"></i> <span>Refresh</span>
         </button>
@@ -662,7 +660,6 @@
           <div class="stat-value" id="statTotalPengaduan">-</div>
           <div class="stat-label">Total Pengaduan</div>
         </div>
-       
       </div>
 
       <div class="chart-row">
@@ -889,14 +886,10 @@
 
     const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxFHRmwUYTyQkmYGBKwOa27C4af-LL7g__yLUqETue5UoDEyEVLK1qd-e1yANJ_bKMcyg/exec';
 
-    // ============================================
-    // KONFIGURASI AUTO REFRESH & SESSION
-    // ============================================
-    const AUTO_REFRESH_INTERVAL = 60000; // 60 detik (ubah sesuai kebutuhan)
+    const AUTO_REFRESH_INTERVAL = 60000;
     let refreshTimer = null;
     let isSessionActive = false;
 
-    // --- SESSION MANAGEMENT ---
     function saveSession() {
       sessionStorage.setItem('panalik_session', 'active');
       sessionStorage.setItem('panalik_login_time', new Date().getTime());
@@ -908,7 +901,7 @@
       const loginTime = sessionStorage.getItem('panalik_login_time');
       if (session === 'active' && loginTime) {
         const elapsed = new Date().getTime() - parseInt(loginTime);
-        if (elapsed < 28800000) { // 8 jam
+        if (elapsed < 28800000) {
           isSessionActive = true;
           return true;
         }
@@ -923,12 +916,11 @@
       stopAutoRefresh();
     }
 
-    // --- AUTO REFRESH MANAGEMENT ---
     function startAutoRefresh() {
       stopAutoRefresh();
       refreshTimer = setInterval(() => {
         if (isSessionActive && document.getElementById('dashboardPage').style.display !== 'none') {
-          loadDashboardData(true); // true = silent refresh
+          loadDashboardData(true);
         }
       }, AUTO_REFRESH_INTERVAL);
     }
@@ -959,10 +951,9 @@
         handleLogout();
         return;
       }
-      loadDashboardData(false); // false = tampilkan loading overlay penuh
+      loadDashboardData(false);
     }
 
-    // --- FUNGSI MODAL ---
     function showAbout() {
       document.getElementById('aboutInitiator').textContent = APP_INFO.initiator;
       document.getElementById('aboutInitiatorPos').textContent = APP_INFO.initiatorPosition;
@@ -978,7 +969,6 @@
       document.getElementById('aboutModal').classList.remove('show');
     }
 
-    // --- LOGIN & LOGOUT ---
     async function handleLoginSubmit(e) {
       e.preventDefault();
       const username = document.getElementById('username').value.trim();
@@ -998,11 +988,11 @@
         btnLogin.innerHTML = '<i class="fas fa-sign-in-alt"></i> Masuk Dashboard';
 
         if (result.success) {
-          saveSession(); // Simpan session
+          saveSession();
           document.getElementById('loginPage').style.display = 'none';
           document.getElementById('dashboardPage').style.display = 'block';
           loadDashboardData(false);
-          startAutoRefresh(); // Mulai auto refresh
+          startAutoRefresh();
         } else {
           errorMsg.classList.add('show');
           document.getElementById('errorText').textContent = result.message;
@@ -1019,7 +1009,7 @@
     }
 
     function handleLogout() {
-      clearSession(); // Hapus session
+      clearSession();
       document.getElementById('dashboardPage').style.display = 'none';
       document.getElementById('loginPage').style.display = 'flex';
       document.getElementById('username').value = '';
@@ -1027,7 +1017,6 @@
       document.getElementById('errorMessage').classList.remove('show');
     }
 
-    // --- LOAD DATA DASHBOARD ---
     async function loadDashboardData(silent = false) {
       const loading = document.getElementById('loadingOverlay');
       
@@ -1039,7 +1028,7 @@
       
       try {
         const response = await fetch(`${APPS_SCRIPT_URL}?action=dashboard`, {
-          cache: 'no-store' // PENTING: Hindari cache browser agar data selalu fresh
+          cache: 'no-store'
         });
         const data = await response.json();
         
@@ -1052,7 +1041,6 @@
         }
         renderDashboard(data);
         
-        // Update timestamp
         const now = new Date();
         document.getElementById('lastUpdate').textContent =
           'Terakhir diperbarui: ' + now.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) + 
@@ -1073,7 +1061,6 @@
 
     function showDashboardError(message) {
       const content = document.querySelector('.dashboard-content');
-      // Hapus error lama jika ada
       const oldError = content.querySelector('.dashboard-error-msg');
       if (oldError) oldError.remove();
 
@@ -1091,54 +1078,79 @@
       content.insertBefore(errorDiv, content.firstChild);
     }
 
+    // ============================================
+    // FUNGSI FORMAT (DIPINDAHKAN KE ATAS AGAR AMAN)
+    // ============================================
+    function formatNumber(value) {
+      if (value === null || value === undefined || value === '') return '0';
+      const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9.-]/g, '')) : value;
+      if (isNaN(num)) return '0';
+      return Number(num).toLocaleString('id-ID');
+    }
+
+    function formatRupiah(value) {
+      if (value === null || value === undefined || value === '') return 'Rp 0';
+      const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9]/g, '')) : value;
+      if (isNaN(num)) return 'Rp 0';
+      return 'Rp ' + Number(num).toLocaleString('id-ID');
+    }
+
+    // ============================================
+    // RENDER DASHBOARD
+    // ============================================
     function renderDashboard(data) {
-      const s = data.survei || {};
-      const p = data.pemeliharaan || {};
-      const pg = data.pengaduan || {};
+      try {
+        const s = data.survei || {};
+        const p = data.pemeliharaan || {};
+        const pg = data.pengaduan || {};
 
-      document.getElementById('statTotalRuas').textContent = s.totalRuas || 0;
-      document.getElementById('statKondisiBaik').textContent = s.kondisiBaik || 0;
-      document.getElementById('statTotalUsulan').textContent = p.totalUsulan || 0;
-      document.getElementById('statTotalPengaduan').textContent = pg.totalMasuk || 0;
-    
-      document.getElementById('valTotalRuas').textContent = s.totalRuas || 0;
-      document.getElementById('valKondisiBaik').textContent = s.kondisiBaik || 0;
-      document.getElementById('valKondisiRingan').textContent = s.kondisiRusakRingan || 0;
-      document.getElementById('valKondisiSedang').textContent = s.kondisiRusakSedang || 0;
-      document.getElementById('valKondisiBerat').textContent = s.kondisiRusakBerat || 0;
-      document.getElementById('valTotalPanjang').textContent = formatNumber(s.totalPanjang) + ' m';
+        document.getElementById('statTotalRuas').textContent = formatNumber(s.totalRuas);
+        document.getElementById('statKondisiBaik').textContent = formatNumber(s.kondisiBaik);
+        document.getElementById('statTotalUsulan').textContent = formatNumber(p.totalUsulan);
+        document.getElementById('statTotalPengaduan').textContent = formatNumber(pg.totalMasuk);
+      
+        document.getElementById('valTotalRuas').textContent = formatNumber(s.totalRuas);
+        document.getElementById('valKondisiBaik').textContent = formatNumber(s.kondisiBaik);
+        document.getElementById('valKondisiRingan').textContent = formatNumber(s.kondisiRusakRingan);
+        document.getElementById('valKondisiSedang').textContent = formatNumber(s.kondisiRusakSedang);
+        document.getElementById('valKondisiBerat').textContent = formatNumber(s.kondisiRusakBerat);
+        document.getElementById('valTotalPanjang').textContent = formatNumber(s.totalPanjang) + ' m';
 
-      const totalKondisi = (s.kondisiBaik || 0) + (s.kondisiRusakRingan || 0) + (s.kondisiRusakSedang || 0) + (s.kondisiRusakBerat || 0);
-      if (totalKondisi > 0) {
-        document.getElementById('progBaik').style.width = ((s.kondisiBaik || 0) / totalKondisi * 100).toFixed(1) + '%';
-        document.getElementById('progRingan').style.width = ((s.kondisiRusakRingan || 0) / totalKondisi * 100).toFixed(1) + '%';
-        document.getElementById('progSedang').style.width = ((s.kondisiRusakSedang || 0) / totalKondisi * 100).toFixed(1) + '%';
-        document.getElementById('progBerat').style.width = ((s.kondisiRusakBerat || 0) / totalKondisi * 100).toFixed(1) + '%';
-        document.getElementById('progressPercent').textContent = '100%';
+        const totalKondisi = (s.kondisiBaik || 0) + (s.kondisiRusakRingan || 0) + (s.kondisiRusakSedang || 0) + (s.kondisiRusakBerat || 0);
+        if (totalKondisi > 0) {
+          document.getElementById('progBaik').style.width = ((s.kondisiBaik || 0) / totalKondisi * 100).toFixed(1) + '%';
+          document.getElementById('progRingan').style.width = ((s.kondisiRusakRingan || 0) / totalKondisi * 100).toFixed(1) + '%';
+          document.getElementById('progSedang').style.width = ((s.kondisiRusakSedang || 0) / totalKondisi * 100).toFixed(1) + '%';
+          document.getElementById('progBerat').style.width = ((s.kondisiRusakBerat || 0) / totalKondisi * 100).toFixed(1) + '%';
+          document.getElementById('progressPercent').textContent = '100%';
+        }
+        renderDonutKondisi(s, totalKondisi);
+
+        document.getElementById('valTotalUsulanPem').textContent = formatNumber(p.totalUsulan);
+        document.getElementById('valUsulanDisetujui').textContent = formatNumber(p.usulanDisetujui);
+        document.getElementById('valUsulanDitolak').textContent = formatNumber(p.usulanDitolak);
+        document.getElementById('valPelaksanaanSelesai').textContent = formatNumber(p.pelaksanaanSelesai);
+        document.getElementById('valPelaksanaanProses').textContent = formatNumber(p.pelaksanaanProses);
+        document.getElementById('valPelaksanaanBelum').textContent = formatNumber(p.pelaksanaanBelumMulai);
+        document.getElementById('valTotalRAB').textContent = formatRupiah(p.totalRAB);
+
+        document.getElementById('valTotalPengaduan').textContent = formatNumber(pg.totalMasuk);
+        document.getElementById('valPengaduanValid').textContent = formatNumber(pg.valid);
+        document.getElementById('valPengaduanTidakValid').textContent = formatNumber(pg.tidakValid);
+        document.getElementById('valPenangananSelesai').textContent = formatNumber(pg.penangananSelesai);
+        document.getElementById('valPenangananProses').textContent = formatNumber(pg.penangananProses);
+        document.getElementById('valPenangananDitolak').textContent = formatNumber(pg.penangananDitolak);
+
+        renderDonutPengaduan(pg);
+      } catch (error) {
+        console.error('Error renderDashboard:', error);
+        showDashboardError('Error saat memproses data: ' + error.message);
       }
-      renderDonutKondisi(s, totalKondisi);
-
-      document.getElementById('valTotalUsulanPem').textContent = p.totalUsulan || 0;
-      document.getElementById('valUsulanDisetujui').textContent = p.usulanDisetujui || 0;
-      document.getElementById('valUsulanDitolak').textContent = p.usulanDitolak || 0;
-      document.getElementById('valPelaksanaanSelesai').textContent = p.pelaksanaanSelesai || 0;
-      document.getElementById('valPelaksanaanProses').textContent = p.pelaksanaanProses || 0;
-      document.getElementById('valPelaksanaanBelum').textContent = p.pelaksanaanBelumMulai || 0;
-      document.getElementById('valTotalRAB').textContent = formatRupiah(p.totalRAB);
-
-      document.getElementById('valTotalPengaduan').textContent = pg.totalMasuk || 0;
-      document.getElementById('valPengaduanValid').textContent = pg.valid || 0;
-      document.getElementById('valPengaduanTidakValid').textContent = pg.tidakValid || 0;
-      document.getElementById('valPenangananSelesai').textContent = pg.penangananSelesai || 0;
-      document.getElementById('valPenangananProses').textContent = pg.penangananProses || 0;
-      document.getElementById('valPenangananDitolak').textContent = pg.penangananDitolak || 0;
-
-      renderDonutPengaduan(pg);
     }
 
     function renderDonutKondisi(s, total) {
       const circumference = 2 * Math.PI * 60;
-      document.getElementById('donutTotal').textContent = total || 0;
+      document.getElementById('donutTotal').textContent = formatNumber(total);
       const segments = [
         { id: 'donutBaik', value: s.kondisiBaik || 0, color: '#27ae60', label: 'Baik' },
         { id: 'donutRingan', value: s.kondisiRusakRingan || 0, color: '#f39c12', label: 'Rusak Ringan' },
@@ -1154,14 +1166,14 @@
         offset += dashLength;
       });
       document.getElementById('kondisiLegend').innerHTML = segments.map(seg => `
-        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${seg.value}</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${formatNumber(seg.value)}</span></div>
       `).join('');
     }
 
     function renderDonutPengaduan(pg) {
       const circumference = 2 * Math.PI * 60;
       const total = pg.totalMasuk || 0;
-      document.getElementById('donutPengaduanTotal').textContent = total;
+      document.getElementById('donutPengaduanTotal').textContent = formatNumber(total);
       const segments = [
         { id: 'donutValid', value: pg.valid || 0, color: '#27ae60', label: 'Valid' },
         { id: 'donutTidakValid', value: pg.tidakValid || 0, color: '#e74c3c', label: 'Tidak Valid' }
@@ -1175,49 +1187,37 @@
         offset += dashLength;
       });
       document.getElementById('pengaduanLegend').innerHTML = segments.map(seg => `
-        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${seg.value}</span></div>
+        <div class="legend-item"><div class="legend-color" style="background:${seg.color};"></div>${seg.label}<span class="legend-value">${formatNumber(seg.value)}</span></div>
       `).join('');
     }
 
-    function formatRupiah(value) {
-      if (!value) return 'Rp 0';
-      const num = typeof value === 'string' ? parseFloat(value.replace(/[^0-9]/g, '')) : value;
-      if (isNaN(num)) return 'Rp 0';
-      return 'Rp ' + num.toLocaleString('id-ID');
+    async function loadLoginConfig() {
+      try {
+        const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
+        const config = await response.json();
+        
+        if (config.formPengaduan) {
+          document.getElementById('btnPengaduan').href = config.formPengaduan;
+        }
+        
+        if (config.socialMedia) {
+          const fbEl = document.getElementById('linkFacebook');
+          if (fbEl) fbEl.href = config.socialMedia.facebook || 'https://www.facebook.com/Uptd-Sapras-Cileunyi';
+          
+          const igEl = document.getElementById('linkInstagram');
+          if (igEl) igEl.href = config.socialMedia.instagram || 'https://www.instagram.com/uptd.sapras.cileunyi/';
+          
+          const ttEl = document.getElementById('linkTiktok');
+          if (ttEl) ttEl.href = config.socialMedia.tiktok || 'https://www.tiktok.com/@uptd.sapras.cileunyi';
+        }
+      } catch (error) {
+        console.error('Gagal load config:', error);
+      }
     }
 
-async function loadLoginConfig() {
-  try {
-    const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
-    const config = await response.json();
-    
-    if (config.formPengaduan) {
-      document.getElementById('btnPengaduan').href = config.formPengaduan;
-    }
-    
-    if (config.socialMedia) {
-      // Gunakan fallback URL yang benar jika data dari Apps Script kosong
-      const fbEl = document.getElementById('linkFacebook');
-      if (fbEl) fbEl.href = config.socialMedia.facebook || 'https://www.facebook.com/uptd.sapras.cileunyi';
-      
-      const igEl = document.getElementById('linkInstagram');
-      if (igEl) igEl.href = config.socialMedia.instagram || 'https://www.instagram.com/uptd.sapras.cileunyi/';
-      
-      const ttEl = document.getElementById('linkTiktok');
-      if (ttEl) ttEl.href = config.socialMedia.tiktok || 'https://www.tiktok.com/@uptd.sapras.cileunyi';
-      
-      // Baris linkYoutube dihapus karena tidak ada elemen tersebut di HTML
-    }
-  } catch (error) {
-    console.error('Gagal load config:', error);
-  }
-}
-
-    // --- INITIALIZATION & VISIBILITY CHANGE ---
     window.addEventListener('DOMContentLoaded', function() {
       loadLoginConfig();
       
-      // Cek session saat halaman dimuat
       if (checkSession()) {
         document.getElementById('loginPage').style.display = 'none';
         document.getElementById('dashboardPage').style.display = 'block';
@@ -1229,7 +1229,6 @@ async function loadLoginConfig() {
       }
     });
 
-    // Hemat resource: Pause auto-refresh saat tab tidak aktif
     document.addEventListener('visibilitychange', function() {
       if (document.hidden) {
         stopAutoRefresh();
