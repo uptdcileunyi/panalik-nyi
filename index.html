@@ -568,34 +568,34 @@
           <i class="fas fa-bullhorn"></i> Pengaduan Masyarakat
         </a>
 
-        <div class="social-links">
-<a href="https://www.facebook.com/"
-   class="facebook"
-   id="linkFacebook"
-   target="_blank"
-   rel="noopener noreferrer"
-   title="Facebook">
-  <i class="fab fa-facebook-f"></i>
-</a>
+<div class="social-links">
+  <a href="https://www.facebook.com/uptd.sapras.cileunyi" 
+     class="facebook" 
+     id="linkFacebook" 
+     target="_blank" 
+     rel="noopener noreferrer" 
+     title="Facebook UPTD Sarpras Cileunyi">
+    <i class="fab fa-facebook-f"></i>
+  </a>
 
-<a href="https://www.instagram.com/uptd.sapras.cileunyi/"
-   class="instagram"
-   id="linkInstagram"
-   target="_blank"
-   rel="noopener noreferrer"
-   title="Instagram UPTD Sarpras Cileunyi">
-  <i class="fab fa-instagram"></i>
-</a>
+  <a href="https://www.instagram.com/uptd.sapras.cileunyi/" 
+     class="instagram" 
+     id="linkInstagram" 
+     target="_blank" 
+     rel="noopener noreferrer" 
+     title="Instagram UPTD Sarpras Cileunyi">
+    <i class="fab fa-instagram"></i>
+  </a>
 
-<a href="https://www.tiktok.com/@uptd.sapras.cileunyi"
-   class="tiktok"
-   id="linkTiktok"
-   target="_blank"
-   rel="noopener noreferrer"
-   title="TikTok UPTD Sarpras Cileunyi">
-  <i class="fab fa-tiktok"></i>
-</a>
-        </div>
+  <a href="https://www.tiktok.com/@uptd.sapras.cileunyi" 
+     class="tiktok" 
+     id="linkTiktok" 
+     target="_blank" 
+     rel="noopener noreferrer" 
+     title="TikTok UPTD Sarpras Cileunyi">
+    <i class="fab fa-tiktok"></i>
+  </a>
+</div>
       </div>
     </div>
     <div class="login-footer"><p>UPTD SARPRAS CILEUNYI</p></div>
@@ -1186,26 +1186,32 @@
       return 'Rp ' + num.toLocaleString('id-ID');
     }
 
-    function formatNumber(value) {
-      if (!value) return '0';
-      return Number(value).toLocaleString('id-ID');
+async function loadLoginConfig() {
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
+    const config = await response.json();
+    
+    if (config.formPengaduan) {
+      document.getElementById('btnPengaduan').href = config.formPengaduan;
     }
-
-    async function loadLoginConfig() {
-      try {
-        const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
-        const config = await response.json();
-        if (config.formPengaduan) document.getElementById('btnPengaduan').href = config.formPengaduan;
-        if (config.socialMedia) {
-          document.getElementById('linkFacebook').href = config.socialMedia.facebook || '#';
-          document.getElementById('linkInstagram').href = config.socialMedia.instagram || '#';
-          document.getElementById('linkYoutube').href = config.socialMedia.youtube || '#';
-          document.getElementById('linkTiktok').href = config.socialMedia.tiktok || '#';
-        }
-      } catch (error) {
-        console.error('Gagal load config:', error);
-      }
+    
+    if (config.socialMedia) {
+      // Gunakan fallback URL yang benar jika data dari Apps Script kosong
+      const fbEl = document.getElementById('linkFacebook');
+      if (fbEl) fbEl.href = config.socialMedia.facebook || 'https://www.facebook.com/uptd.sapras.cileunyi';
+      
+      const igEl = document.getElementById('linkInstagram');
+      if (igEl) igEl.href = config.socialMedia.instagram || 'https://www.instagram.com/uptd.sapras.cileunyi/';
+      
+      const ttEl = document.getElementById('linkTiktok');
+      if (ttEl) ttEl.href = config.socialMedia.tiktok || 'https://www.tiktok.com/@uptd.sapras.cileunyi';
+      
+      // Baris linkYoutube dihapus karena tidak ada elemen tersebut di HTML
     }
+  } catch (error) {
+    console.error('Gagal load config:', error);
+  }
+}
 
     // --- INITIALIZATION & VISIBILITY CHANGE ---
     window.addEventListener('DOMContentLoaded', function() {
