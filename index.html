@@ -1740,9 +1740,6 @@
       try {
         const response = await fetch(`${APPS_SCRIPT_URL}?action=config`);
         const config = await response.json();
-        
-        const dashboardPublikUrl = 'https://uptdcileunyi.github.io/dashboard-publik/';
-        
         if (config.formPengaduan) {
           document.getElementById('tabPengaduan').href = config.formPengaduan;
         }
