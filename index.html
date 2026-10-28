@@ -1133,6 +1133,182 @@
       .login-tab-secondary, .btn-login, .social-links a { animation: none !important; transition: none !important; }
     }
 
+
+    /* ===== PENYEMPURNAAN DASHBOARD ADMIN: NAVBAR PROFESIONAL ===== */
+    .navbar {
+      min-height: 76px;
+      height: auto;
+      padding: 12px clamp(16px, 3vw, 38px);
+      gap: 22px;
+      background: linear-gradient(112deg, #103e35 0%, #165746 52%, #1f7564 100%);
+      border-bottom: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 8px 28px rgba(12, 54, 43, .20);
+    }
+
+    .navbar-brand { flex-shrink: 0; gap: 13px; }
+    .navbar-brand .brand-icon {
+      width: 44px;
+      height: 44px;
+      border: 1px solid rgba(255,255,255,.2);
+      background: rgba(255,255,255,.12);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.12);
+    }
+    .navbar-brand h2 { font-size: 17px; letter-spacing: .35px; }
+    .navbar-brand span { display: block; margin-top: 3px; font-size: 11px; letter-spacing: .45px; }
+
+    .navbar-right {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .btn-nav-link {
+      min-height: 40px;
+      padding: 9px 13px;
+      border: 1px solid rgba(255,255,255,.17);
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 650;
+      letter-spacing: .05px;
+      gap: 8px;
+      background: rgba(255,255,255,.075);
+      box-shadow: none;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn-survey-nav {
+      background: rgba(255,255,255,.12);
+      border-color: rgba(255,255,255,.22);
+    }
+    .btn-database-link { background: rgba(9, 35, 29, .18); }
+    .btn-nav-link:hover {
+      background: rgba(255,255,255,.22);
+      border-color: rgba(255,255,255,.4);
+      transform: translateY(-1px);
+      box-shadow: 0 5px 14px rgba(0,0,0,.12);
+    }
+    .nav-external-icon { font-size: 9px; opacity: .72; margin-left: 1px; }
+
+    .btn-database-nav, .btn-refresh, .btn-logout {
+      min-height: 40px;
+      padding: 9px 13px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 650;
+      border: 1px solid rgba(255,255,255,.15);
+    }
+    .btn-database-nav {
+      color: #fff;
+      background: rgba(255,255,255,.08);
+    }
+    .btn-refresh {
+      color: #e4fff1;
+      background: rgba(35, 173, 111, .22);
+      border-color: rgba(143, 239, 190, .18);
+    }
+    .btn-logout {
+      color: #fff0ee;
+      background: rgba(196, 61, 54, .24);
+      border-color: rgba(255, 190, 184, .2);
+    }
+    .btn-database-nav:hover, .btn-refresh:hover, .btn-logout:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.12);
+    }
+
+    /* ===== KARTU TOTAL PENGADUAN LEBIH MENONJOL ===== */
+    .stat-card-complaints {
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+      background: linear-gradient(135deg, #fff 0%, #fff8f7 58%, #fff0ee 100%);
+      border: 1px solid #f5c5c0;
+      border-left: 5px solid #d94343;
+      box-shadow: 0 8px 24px rgba(177, 48, 48, .11);
+    }
+    .stat-card-complaints::after {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      width: 150px;
+      height: 150px;
+      right: -54px;
+      top: -62px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(229, 72, 72, .13), rgba(229, 72, 72, 0));
+      pointer-events: none;
+    }
+    .stat-card-complaints:hover {
+      border-color: #e8a7a1;
+      box-shadow: 0 13px 30px rgba(177, 48, 48, .16);
+    }
+    .stat-card-complaints .stat-icon.red {
+      width: 52px;
+      height: 52px;
+      color: #c92f36;
+      background: #ffe4e2;
+      box-shadow: inset 0 0 0 1px rgba(201,47,54,.07);
+    }
+    .stat-card-complaints .stat-value {
+      color: #b9232b;
+      font-size: clamp(30px, 2.4vw, 36px);
+      letter-spacing: -.8px;
+    }
+    .stat-card-complaints .stat-label {
+      color: #8f3438;
+      font-size: 12px;
+      font-weight: 750;
+      letter-spacing: .15px;
+    }
+    .stat-card-complaints .stat-label::after {
+      content: " • PERLU DIPANTAU";
+      display: inline-block;
+      margin-left: 3px;
+      color: #c43c40;
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .35px;
+    }
+
+    .dashboard-content { max-width: 1320px; padding: 32px clamp(16px, 2.5vw, 30px); }
+    .dashboard-header { margin-bottom: 25px; }
+    .dashboard-header h1 { letter-spacing: -.55px; }
+    .last-update { border: 1px solid #e5eee9; }
+    .stat-card, .section-card, .chart-card {
+      box-shadow: 0 5px 18px rgba(23, 61, 48, .055);
+      border-color: #e7eee9;
+    }
+    .stat-card { padding: 23px; }
+    .section-card, .chart-card { border-radius: 18px; }
+
+    @media (max-width: 980px) {
+      .navbar { align-items: flex-start; flex-direction: column; gap: 13px; }
+      .navbar-right { width: 100%; justify-content: flex-start; }
+    }
+    @media (max-width: 760px) {
+      .navbar { padding: 14px 16px; }
+      .navbar-right { gap: 7px; }
+      .btn-nav-link, .btn-database-nav, .btn-refresh, .btn-logout {
+        min-height: 38px;
+        padding: 8px 10px;
+        font-size: 11.5px;
+      }
+      .btn-nav-link span, .btn-database-nav span, .btn-refresh span { display: inline; }
+      .dashboard-content { padding: 23px 14px; }
+      .stat-card { padding: 18px; }
+    }
+    @media (max-width: 480px) {
+      .navbar-right { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .btn-nav-link, .btn-database-nav, .btn-refresh, .btn-logout {
+        width: 100%;
+        justify-content: center;
+        white-space: normal;
+      }
+      .navbar-brand h2 { font-size: 16px; }
+      .stat-card-complaints .stat-label::after { display: block; margin: 5px 0 0; }
+    }
+
   </style>
 </head>
 <body>
@@ -1271,7 +1447,7 @@
           <div class="stat-value" id="statTotalUsulan">0</div>
           <div class="stat-label">Total Usulan</div>
         </div>
-        <div class="stat-card">
+        <div class="stat-card stat-card-complaints">
           <div class="stat-icon red"><i class="fas fa-exclamation-triangle"></i></div>
           <div class="stat-value" id="statTotalPengaduan">0</div>
           <div class="stat-label">Total Pengaduan</div>
